@@ -2,11 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Header from './Components/Layout/Header';
 import Footer from './Components/Layout/Footer';
+import ClassPage from './Components/ClassPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <React.StrictMode>
+  <div>
     <Header />
+    <div className="row text-white">
+      <div className="col-6">
+        <span className="h1 text-warning text-center">Class Component</span>
+        <ClassPage />
+      </div>
+    </div>
     <Footer />
-  </React.StrictMode>
+  </div>
 );
+
+// componentDidMount method was being called multiple times. hence replaced React.StrictMode with div
