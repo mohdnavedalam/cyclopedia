@@ -4,7 +4,8 @@ import { getRandomUser } from "../Utilities/Api";
 class ClassPage extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
-        this.state = {
+        //this.state = JSON.parse(localStorage.getItem("cyclopediaState") as string) || {
+        this.state = JSON.parse(localStorage.getItem("cyclopediaState")!) || {
             instructor: undefined,
             studentList: [],
             studentCount: 0,
@@ -15,20 +16,26 @@ class ClassPage extends React.Component<any, any> {
     }
     componentDidMount = async () => {
         console.log("component did mount");
-        const response = await getRandomUser();
-        console.log(response);
-        this.setState((prevState: any) => {
-            return {
-                instructor: {
-                    name: response.data.first_name + " " + response.data.last_name,
-                    email: response.data.email,
-                    phone: response.data.phone_number,
-                },
-            };
-        });
+        if (JSON.parse(localStorage.getItem("cyclopediaState")!)) {
+            this.setState(JSON.parse(localStorage.getItem("cyclopediaState")!));
+        } else {
+            const response = await getRandomUser();
+            console.log(response);
+            this.setState((prevState: any) => {
+                return {
+                    instructor: {
+                        name: response.data.first_name + " " + response.data.last_name,
+                        email: response.data.email,
+                        phone: response.data.phone_number,
+                    },
+                };
+            });
+        }
     };
     componentDidUpdate = () => {
         console.log("component did update");
+        localStorage.setItem("cyclopediaState", JSON.stringify(this.state));
+
     };
     componentWillUnmount = () => {
         console.log("component will unmount");
@@ -95,6 +102,7 @@ class ClassPage extends React.Component<any, any> {
                     <br />
                     <textarea
                         placeholder="Feedback..."
+                        value={this.state.inputFeedback}
                         onChange={this.handleTextAreaChange}
                     >
                     </textarea>
