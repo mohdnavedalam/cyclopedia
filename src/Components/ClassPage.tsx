@@ -9,6 +9,8 @@ class ClassPage extends React.Component<any, any> {
             studentList: [],
             studentCount: 0,
             hideInstructor: false,
+            inputName: "",
+            inputFeedback: "",
         };
     }
     componentDidMount = async () => {
@@ -56,6 +58,10 @@ class ClassPage extends React.Component<any, any> {
         });
     }
 
+    handleTextAreaChange = (e: any) => {
+        this.setState({ inputFeedback: e.target.value });
+    };
+
     render() {
         console.log("render component");
         return (
@@ -73,6 +79,27 @@ class ClassPage extends React.Component<any, any> {
                         <br />
                     </div>
                 )}
+                <div className="p-3">
+                    <span className="h4 text-success">Feedback</span>
+                    <br />
+                    <input
+                        type="text"
+                        placeholder="Name.."
+                        value={this.state.inputName}
+                        onChange={(e: any) => {
+                            this.setState({ inputName: e.target.value })
+                        }}
+                    >
+                    </input>
+                    Value: {this.state.inputName}
+                    <br />
+                    <textarea
+                        placeholder="Feedback..."
+                        onChange={this.handleTextAreaChange}
+                    >
+                    </textarea>
+                    Value: {this.state.inputFeedback}
+                </div>
                 <div className="p-3">
                     <span className="h4 text-success">Students</span>
                     <br />
