@@ -10,7 +10,7 @@ class ClassPage extends React.Component<any, any> {
             instructor: undefined,
             studentList: [],
             studentCount: 0,
-            hideInstructor: false,
+            hideInstructor: true,
             inputName: "",
             inputFeedback: "",
         };
@@ -35,8 +35,10 @@ class ClassPage extends React.Component<any, any> {
     };
     componentDidUpdate = () => {
         console.log("component did update");
-        localStorage.setItem("cyclopediaState", JSON.stringify(this.state));
-
+        if (this.state.hideInstructor == false)
+            localStorage.setItem("cyclopediaState", JSON.stringify(this.state));
+        else 
+            localStorage.removeItem("cyclopediaState");
     };
     componentWillUnmount = () => {
         console.log("component will unmount");
@@ -70,13 +72,24 @@ class ClassPage extends React.Component<any, any> {
         this.setState({ inputFeedback: e.target.value });
     };
 
+    handleToggleInstructor = () => {
+        this.setState((prevState: any) => {
+            return {
+                hideInstructor: !prevState.hideInstructor,
+            }
+        });
+    };
+
     render() {
         console.log("render component");
         return (
             <div>
-                {this.state.instructor && (
+                <span className="h4 text-success">Instructor &nbsp;</span>
+                <i className={`bi ${this.state.hideInstructor ? "bi-toggle-off" : "bi-toggle-on"} btn btn-success btn-sm`} onClick={this.handleToggleInstructor}></i>
+
+                {!this.state.hideInstructor ? (
                     <Instructor instructor={this.state.instructor} />
-                )}
+                ) : null}
                 <div className="p-3">
                     <span className="h4 text-success">Feedback</span>
                     <br />
