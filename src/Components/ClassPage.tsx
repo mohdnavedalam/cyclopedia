@@ -1,6 +1,7 @@
 import React from "react";
 import { getRandomUser } from "../Utilities/Api";
 import Instructor from "./Instructor";
+import Student from "./Student";
 
 class ClassPage extends React.Component<any, any> {
     constructor(props: any) {
@@ -15,6 +16,7 @@ class ClassPage extends React.Component<any, any> {
             inputFeedback: "",
         };
     }
+
     componentDidMount = async () => {
         console.log("component did mount");
         if (JSON.parse(localStorage.getItem("cyclopediaState")!)) {
@@ -33,40 +35,39 @@ class ClassPage extends React.Component<any, any> {
             });
         }
     };
-    componentDidUpdate = () => {
+
+    componentDidUpdate = async (prevState: any, prevProps: any) => {
         console.log("component did update");
         if (this.state.hideInstructor == false)
             localStorage.setItem("cyclopediaState", JSON.stringify(this.state));
-        else 
+        else
             localStorage.removeItem("cyclopediaState");
+        console.log(this.state.studentCount);
+        console.log(prevProps.studentCount);
+        if (prevProps.studentCount < this.state.studentCount) {
+            const response = await getRandomUser();
+            this.setState((prevState: any) => {
+                return {
+                    studentList: [
+                        ...prevProps.studentList,
+                        {
+                            name: response.data.first_name + " " + response.data.last_name,
+                        },
+                    ],
+                };
+            });
+        } else if (prevProps.studentCount > this.state.studentCount){
+            this.setState((prevState: any) => {
+                return {
+                    studentList: [],
+                }
+            });
+        }
     };
+
     componentWillUnmount = () => {
         console.log("component will unmount");
     };
-
-    handleAddStudent = () => {
-        this.setState((prevState: any) => {
-            return {
-                studentCount: prevState.studentCount + 1,
-            }
-        });
-    };
-
-    handleRemoveStudent = () => {
-        this.setState((prevState: any) => {
-            return {
-                studentCount: prevState.studentCount - 1,
-            }
-        });
-    };
-
-    handleRemoveAllStudents = () => {
-        this.setState((prevState: any) => {
-            return {
-                studentCount: 0,
-            }
-        });
-    }
 
     handleTextAreaChange = (e: any) => {
         this.setState({ inputFeedback: e.target.value });
@@ -78,6 +79,14 @@ class ClassPage extends React.Component<any, any> {
                 hideInstructor: !prevState.hideInstructor,
             }
         });
+    };
+
+    handleStudentCountChange = (studentCount: number) => {
+        this.setState({ studentCount });
+    };
+
+    handleStudentListChange = (studentList: []) => {
+        this.setState({ studentList });
     };
 
     render() {
@@ -112,16 +121,12 @@ class ClassPage extends React.Component<any, any> {
                     </textarea>
                     Value: {this.state.inputFeedback}
                 </div>
-                <div className="p-3">
-                    <span className="h4 text-success">Students</span>
-                    <br />
-                    <div>Student Count: {this.state.studentCount}</div>
-                    <button className="btn btn-success btn-sm" onClick={this.handleAddStudent}>Add Student</button>
-                    &nbsp;
-                    <button className="btn btn-warning btn-sm" onClick={this.handleRemoveStudent}>Remove Student</button>
-                    &nbsp;
-                    <button className="btn btn-danger btn-sm" onClick={this.handleRemoveAllStudents}>Remove All Students</button>
-                </div>
+                <Student
+                    studentList={this.state.studentList}
+                    handleStudentListChange={this.handleStudentListChange}
+                    studentCount={this.state.studentCount}
+                    handleStudentCountChange={this.handleStudentCountChange}
+                />
             </div>
         );
     };
