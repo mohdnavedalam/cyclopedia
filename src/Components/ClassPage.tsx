@@ -11,7 +11,7 @@ class ClassPage extends React.Component<any, any> {
             instructor: undefined,
             studentList: [],
             studentCount: 0,
-            hideInstructor: true,
+            hideInstructor: false,
             inputName: "",
             inputFeedback: "",
         };
@@ -96,7 +96,7 @@ class ClassPage extends React.Component<any, any> {
                 <span className="h4 text-success">Instructor &nbsp;</span>
                 <i className={`bi ${this.state.hideInstructor ? "bi-toggle-off" : "bi-toggle-on"} btn btn-success btn-sm`} onClick={this.handleToggleInstructor}></i>
 
-                {!this.state.hideInstructor ? (
+                {!this.state.hideInstructor && this.state.instructor ? (
                     <Instructor instructor={this.state.instructor} />
                 ) : null}
                 <div className="p-3">
