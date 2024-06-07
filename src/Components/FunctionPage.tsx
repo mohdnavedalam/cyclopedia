@@ -29,6 +29,7 @@ const FunctionPage = () => {
 
     useEffect(() => {
         console.log("call on first/initial render/mount");
+        state.hideInstructor = false;
     }, []);
 
     useEffect(() => {
@@ -124,9 +125,9 @@ const FunctionPage = () => {
     return (
         <div>
             <span className="h4 text-success">Instructor &nbsp;</span>
-            <i className={`bi ${state.hideInstructor ? "bi-toggle-off" : "bi-toggle-on"} btn btn-success btn-sm`} onClick={handleToggleInstructor}></i>
+            <i className={`bi ${state.hideInstructor ? "bi-toggle-on" : "bi-toggle-off"} btn btn-success btn-sm`} onClick={handleToggleInstructor}></i>
             {
-                !state.hideInstructor && state.instructor ? (
+                state.hideInstructor && state.instructor ? (
                     <InstructorFunc instructor={state.instructor} />
                 ) : null
             }
