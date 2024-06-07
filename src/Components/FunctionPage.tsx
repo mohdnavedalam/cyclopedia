@@ -57,13 +57,16 @@ const FunctionPage = () => {
             setState((prevState: any) => {
                 return {
                     ...prevState,
-                    studentList: {
-                        name: response.data.first_name + " " + response.data.last_name,
-                    }
+                    studentList: [
+                        ...prevState.studentList,
+                        {
+                            name: response.data.first_name + " " + response.data.last_name,
+                        }
+                    ]
                 }
             })
         };
-        if (state.studentList.length < state.studentCount){
+        if (state.studentList.length < state.studentCount) {
             getStudent();
         } else if (state.studentList.length > state.studentCount) {
             setState((prevState: any) => {
@@ -107,7 +110,7 @@ const FunctionPage = () => {
             }
         });
     };
-        
+
 
     const handleStudentListChange = (studentList: []) => {
         setState((preveState: any) => {
