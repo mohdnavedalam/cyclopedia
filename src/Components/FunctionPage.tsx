@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getRandomUser } from "../Utilities/Api";
 import Instructor from "./Instructor";
 import Student from "./Student";
+import InstructorFunc from "./InstructorFunc";
 
 const FunctionPage = () => {
 
@@ -149,7 +150,7 @@ const FunctionPage = () => {
             <i className={`bi ${state.hideInstructor ? "bi-toggle-off" : "bi-toggle-on"} btn btn-success btn-sm`} onClick={handleToggleInstructor}></i>
             {
                 !state.hideInstructor && state.instructor ? (
-                    <Instructor instructor={state.instructor} />
+                    <InstructorFunc instructor={state.instructor} />
                 ) : null
             }
             <div className="p-3">
