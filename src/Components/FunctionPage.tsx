@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getRandomUser } from "../Utilities/Api";
 import InstructorFunc from "./InstructorFunc";
 import StudentFunc from "./StudentFunc";
+import { get } from "http";
 
 const FunctionPage = () => {
 
@@ -27,7 +28,11 @@ const FunctionPage = () => {
     });
 
     useEffect(() => {
-        console.log("call on initial/first render/mount");
+        console.log("call on first/initial render/mount");
+    }, []);
+
+    useEffect(() => {
+        console.log("call on hideInstructor value changes");
         const getUser = async () => {
             const response = await getRandomUser();
             setState((prevState: any) => {
@@ -45,6 +50,30 @@ const FunctionPage = () => {
             getUser();
         }
     }, [state.hideInstructor]);
+
+    useEffect(() => {
+        const getStudent = async () => {
+            const response = await getRandomUser();
+            setState((prevState: any) => {
+                return {
+                    ...prevState,
+                    studentList: {
+                        name: response.data.first_name + " " + response.data.last_name,
+                    }
+                }
+            })
+        };
+        if (state.studentList.length < state.studentCount){
+            getStudent();
+        } else if (state.studentList.length > state.studentCount) {
+            setState((prevState: any) => {
+                return {
+                    ...prevState,
+                    studentList: []
+                };
+            });
+        }
+    }, [state.studentCount]);
 
     useEffect(() => {
         console.log("call only on value changes");
