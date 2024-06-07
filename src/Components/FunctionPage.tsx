@@ -15,7 +15,7 @@ const FunctionPage = () => {
     });
 
     const [inputName, setInputName] = useState(() => {
-        return {name: ""};
+        return { name: "" };
     });
 
     const [inputFeedback, setInputFeedback] = useState(() => {
@@ -28,6 +28,20 @@ const FunctionPage = () => {
 
     useEffect(() => {
         console.log("call on initial/first render/mount");
+        const getUser = async () => {
+            const response = await getRandomUser();
+            setState((prevState: any) => {
+                return {
+                    ...prevState,
+                    instructor: {
+                        name: response.data.first_name + " " + response.data.last_name,
+                        email: response.data.email,
+                        phone: response.data.phone_number,
+                    },
+                };
+            });
+        };
+        getUser();
     }, []);
 
     useEffect(() => {
@@ -129,46 +143,45 @@ const FunctionPage = () => {
 
     // render() {
     //     console.log("render component");
-    return(
-            <div>
-                <span className="h4 text-success">Instructor &nbsp;</span>
-                <i className={`bi ${state.hideInstructor ? "bi-toggle-off" : "bi-toggle-on"} btn btn-success btn-sm`} onClick={handleToggleInstructor}></i>
-
-{
-    !state.hideInstructor && state.instructor ? (
-        <Instructor instructor={state.instructor} />
-    ) : null
-}
-                <div className="p-3">
-                    <span className="h4 text-success">Feedback</span>
-                    <br />
-                    <input
-                        type="text"
-                        placeholder="Name.."
-                        value={inputName.name}
-                        onChange={(e: any) => {
-                            setInputName({name: e.target.value});
-                        }}
-                    >
-                    </input>
-                    Value: {inputName.name}
-                    <br />
-                    <textarea
-                        placeholder="Feedback..."
-                        value={inputFeedback}
-                        onChange={handleTextAreaChange}
-                    >
-                    </textarea>
-                    Value: {inputFeedback}
-                </div>
-                <Student
-                    studentList={state.studentList}
-                    //handleStudentListChange={handleStudentListChange}
-                    studentCount={state.studentCount}
-                    //handleStudentCountChange={handleStudentCountChange}
-                />
-            </div >
-        );
+    return (
+        <div>
+            <span className="h4 text-success">Instructor &nbsp;</span>
+            <i className={`bi ${state.hideInstructor ? "bi-toggle-off" : "bi-toggle-on"} btn btn-success btn-sm`} onClick={handleToggleInstructor}></i>
+            {
+                !state.hideInstructor && state.instructor ? (
+                    <Instructor instructor={state.instructor} />
+                ) : null
+            }
+            <div className="p-3">
+                <span className="h4 text-success">Feedback</span>
+                <br />
+                <input
+                    type="text"
+                    placeholder="Name.."
+                    value={inputName.name}
+                    onChange={(e: any) => {
+                        setInputName({ name: e.target.value });
+                    }}
+                >
+                </input>
+                Value: {inputName.name}
+                <br />
+                <textarea
+                    placeholder="Feedback..."
+                    value={inputFeedback}
+                    onChange={handleTextAreaChange}
+                >
+                </textarea>
+                Value: {inputFeedback}
+            </div>
+            <Student
+                studentList={state.studentList}
+                //handleStudentListChange={handleStudentListChange}
+                studentCount={state.studentCount}
+            //handleStudentCountChange={handleStudentCountChange}
+            />
+        </div >
+    );
     //};
 }
 
