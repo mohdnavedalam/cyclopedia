@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { getRandomUser } from "../Utilities/Api";
 import InstructorFunc from "./InstructorFunc";
 import StudentFunc from "./StudentFunc";
@@ -13,6 +13,7 @@ const FunctionPage = () => {
     const totalRender = useRef(0);
     const prevStudentCount = useRef(0);
     const inputFeedbackRef = useRef<HTMLTextAreaElement>(null);
+    const id = useId()
 
     const [state, setState] = useState(() => {
         return {
@@ -187,18 +188,22 @@ const FunctionPage = () => {
                     onChange={(e: any) => {
                         setInputName({ name: e.target.value });
                     }}
+                    id={`${id}-inputName`}
                 >
                 </input>
-                Value: {inputName.name}
+                <label htmlFor={'${id}-inputName'}>Name Value: {inputName.name}</label>
+                {/* Value: {inputName.name} */}
                 <br />
                 <textarea
                     placeholder="Feedback..."
                     value={inputFeedback}
                     ref={inputFeedbackRef}
                     onChange={handleTextAreaChange}
+                    id={'${id}-inputFeedback'}
                 >
                 </textarea>
-                Value: {inputFeedback}
+                <label htmlFor={'${id}-inputFeedback'}>Feedback Value:</label>{" "}{inputFeedback}
+                {/* Value: {inputFeedback} */}
             </div>
             <StudentFunc
                 studentList={state.studentList}
