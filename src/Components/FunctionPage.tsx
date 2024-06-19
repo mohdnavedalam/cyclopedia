@@ -191,7 +191,7 @@ const FunctionPage = () => {
                     id={`${id}-inputName`}
                 >
                 </input>
-                <label htmlFor={'${id}-inputName'}>Name Value: {inputName.name}</label>
+                <label htmlFor={`${id}-inputName`}>Name Value: {inputName.name}</label>
                 {/* Value: {inputName.name} */}
                 <br />
                 <textarea
@@ -199,10 +199,10 @@ const FunctionPage = () => {
                     value={inputFeedback}
                     ref={inputFeedbackRef}
                     onChange={handleTextAreaChange}
-                    id={'${id}-inputFeedback'}
+                    id={`${id}-inputFeedback`}
                 >
                 </textarea>
-                <label htmlFor={'${id}-inputFeedback'}>Feedback Value:</label>{" "}{inputFeedback}
+                <label htmlFor={`${id}-inputFeedback`}>Feedback Value:</label>{" "}{inputFeedback}
                 {/* Value: {inputFeedback} */}
             </div>
             <StudentFunc
