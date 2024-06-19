@@ -12,6 +12,7 @@ const FunctionPage = () => {
 
     const totalRender = useRef(0);
     const prevStudentCount = useRef(0);
+    const inputFeedbackRef = useRef<HTMLTextAreaElement>(null);
 
     const [state, setState] = useState(() => {
         return {
@@ -126,6 +127,13 @@ const FunctionPage = () => {
         }
     }, [inputName]);
 
+    useEffect(() => {
+        if (inputFeedbackRef.current !== null) {
+            inputFeedbackRef.current.focus();
+        }
+        return () => {};
+    }, []);
+
     const handleTextAreaChange = (e: any) => {
         setInputFeedback(e.target.value);
     };
@@ -186,6 +194,7 @@ const FunctionPage = () => {
                 <textarea
                     placeholder="Feedback..."
                     value={inputFeedback}
+                    ref={inputFeedbackRef}
                     onChange={handleTextAreaChange}
                 >
                 </textarea>
