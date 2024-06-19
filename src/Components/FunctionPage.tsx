@@ -11,6 +11,7 @@ const FunctionPage = () => {
     // });
 
     const totalRender = useRef(0);
+    const prevStudentCount = useRef(0);
 
     const [state, setState] = useState(() => {
         return {
@@ -46,7 +47,17 @@ const FunctionPage = () => {
     useEffect(() => {
         totalRender.current++;
         console.log("render" + " " + totalRender.current);
-    });
+    }, [state.hideInstructor]);
+
+    // useEffect(() => {
+    //     prevStudentCount.current++;
+    //     //console.log("student render" + " " + prevStudentCount.current);
+    //     console.log("Prev count" + prevStudentCount.current);
+    //     console.log("Current Count" + state.studentCount);
+    //     prevStudentCount.current = state.studentCount;
+    //     console.log("Prev count" + prevStudentCount.current);
+    //     console.log("Current Count" + state.studentCount);
+    // }, [state.studentCount]);
 
     useEffect(() => {
         //console.log("call on hideInstructor value changes");
@@ -83,9 +94,9 @@ const FunctionPage = () => {
                 }
             })
         };
-        if (state.studentList.length < state.studentCount) {
+        if (prevStudentCount.current < state.studentCount) {
             getStudent();
-        } else if (state.studentList.length > state.studentCount) {
+        } else if (prevStudentCount.current > state.studentCount) {
             setState((prevState: any) => {
                 return {
                     ...prevState,
@@ -93,6 +104,15 @@ const FunctionPage = () => {
                 };
             });
         }
+    }, [state.studentCount]);
+
+    useEffect(() => {
+        prevStudentCount.current++;
+        // console.log("Prev count" + prevStudentCount.current);
+        // console.log("Current Count" + state.studentCount);
+        prevStudentCount.current = state.studentCount;
+        // console.log("Prev count" + prevStudentCount.current);
+        // console.log("Current Count" + state.studentCount);
     }, [state.studentCount]);
 
     useEffect(() => {
