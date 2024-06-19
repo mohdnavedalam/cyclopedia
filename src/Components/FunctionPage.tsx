@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getRandomUser } from "../Utilities/Api";
 import InstructorFunc from "./InstructorFunc";
 import StudentFunc from "./StudentFunc";
@@ -6,9 +6,11 @@ import { get } from "http";
 
 const FunctionPage = () => {
 
-    const [totalRender, setTotalRender] = useState(() => {
-        return 0;
-    });
+    // const [totalRender, setTotalRender] = useState(() => {
+    //     return 0;
+    // });
+
+    const totalRender = useRef(0);
 
     const [state, setState] = useState(() => {
         return {
@@ -27,19 +29,24 @@ const FunctionPage = () => {
         return "";
     });
 
-    useEffect(() => {
-        //console.log("call on every render");
-    });
+    // useEffect(() => {
+    //     //console.log("call on every render");
+    // });
 
     useEffect(() => {
         //console.log("call on first/initial render/mount");
         state.hideInstructor = false;
     }, []);
 
+    // useEffect(() => {
+    //     setTotalRender((prevState: any) => prevState + 1);
+    //     console.log("render" + " " + totalRender);
+    // }, [state.hideInstructor]);
+
     useEffect(() => {
-        setTotalRender((prevState: any) => prevState + 1);
-        console.log("render" + " " + totalRender);
-    }, [state.hideInstructor]);
+        totalRender.current++;
+        console.log("render" + " " + totalRender.current);
+    });
 
     useEffect(() => {
         //console.log("call on hideInstructor value changes");
@@ -140,7 +147,8 @@ const FunctionPage = () => {
                     <InstructorFunc instructor={state.instructor} />
                 ) : null
             }
-            <div className="p-3">Render Count: {totalRender}</div>
+            {/* <div className="p-3">Render Count: {totalRender}</div> */}
+            <div className="p-3">Render Count: {totalRender.current}</div>
             <div className="p-3">
                 <span className="h4 text-success">Feedback</span>
                 <br />
