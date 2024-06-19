@@ -1,10 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { getRandomUser } from "../Utilities/Api";
 import InstructorFunc from "./InstructorFunc";
 import StudentFunc from "./StudentFunc";
 import { get } from "http";
 
 const FunctionPage = () => {
+
+    // const [totalRender, setTotalRender] = useState(() => {
+    //     return 0;
+    // });
+
+    const totalRender = useRef(0);
+    const prevStudentCount = useRef(0);
+    const inputFeedbackRef = useRef<HTMLTextAreaElement>(null);
+    const id = useId()
 
     const [state, setState] = useState(() => {
         return {
@@ -23,17 +32,37 @@ const FunctionPage = () => {
         return "";
     });
 
-    useEffect(() => {
-        console.log("call on every render");
-    });
+    // useEffect(() => {
+    //     //console.log("call on every render");
+    // });
 
     useEffect(() => {
-        console.log("call on first/initial render/mount");
+        //console.log("call on first/initial render/mount");
         state.hideInstructor = false;
     }, []);
 
+    // useEffect(() => {
+    //     setTotalRender((prevState: any) => prevState + 1);
+    //     console.log("render" + " " + totalRender);
+    // }, [state.hideInstructor]);
+
     useEffect(() => {
-        console.log("call on hideInstructor value changes");
+        totalRender.current++;
+        console.log("render" + " " + totalRender.current);
+    }, [state.hideInstructor]);
+
+    // useEffect(() => {
+    //     prevStudentCount.current++;
+    //     //console.log("student render" + " " + prevStudentCount.current);
+    //     console.log("Prev count" + prevStudentCount.current);
+    //     console.log("Current Count" + state.studentCount);
+    //     prevStudentCount.current = state.studentCount;
+    //     console.log("Prev count" + prevStudentCount.current);
+    //     console.log("Current Count" + state.studentCount);
+    // }, [state.studentCount]);
+
+    useEffect(() => {
+        //console.log("call on hideInstructor value changes");
         const getUser = async () => {
             const response = await getRandomUser();
             setState((prevState: any) => {
@@ -47,7 +76,7 @@ const FunctionPage = () => {
                 };
             });
         };
-        if (state.hideInstructor) {
+        if (!state.hideInstructor) {
             getUser();
         }
     }, [state.hideInstructor]);
@@ -67,9 +96,9 @@ const FunctionPage = () => {
                 }
             })
         };
-        if (state.studentList.length < state.studentCount) {
+        if (prevStudentCount.current < state.studentCount) {
             getStudent();
-        } else if (state.studentList.length > state.studentCount) {
+        } else if (prevStudentCount.current > state.studentCount) {
             setState((prevState: any) => {
                 return {
                     ...prevState,
@@ -80,15 +109,31 @@ const FunctionPage = () => {
     }, [state.studentCount]);
 
     useEffect(() => {
-        console.log("call only on value changes");
+        prevStudentCount.current++;
+        // console.log("Prev count" + prevStudentCount.current);
+        // console.log("Current Count" + state.studentCount);
+        prevStudentCount.current = state.studentCount;
+        // console.log("Prev count" + prevStudentCount.current);
+        // console.log("Current Count" + state.studentCount);
+    }, [state.studentCount]);
+
+    useEffect(() => {
+        //console.log("call only on value changes");
     }, [state.hideInstructor, inputFeedback]);
 
     useEffect(() => {
-        console.log("call on first render");
+        //console.log("call on first render");
         return () => {
-            console.log("call on unmount");
+            //console.log("call on unmount");
         }
     }, [inputName]);
+
+    useEffect(() => {
+        if (inputFeedbackRef.current !== null) {
+            inputFeedbackRef.current.focus();
+        }
+        return () => {};
+    }, []);
 
     const handleTextAreaChange = (e: any) => {
         setInputFeedback(e.target.value);
@@ -131,6 +176,8 @@ const FunctionPage = () => {
                     <InstructorFunc instructor={state.instructor} />
                 ) : null
             }
+            {/* <div className="p-3">Render Count: {totalRender}</div> */}
+            <div className="p-3">Render Count: {totalRender.current}</div>
             <div className="p-3">
                 <span className="h4 text-success">Feedback</span>
                 <br />
@@ -141,17 +188,22 @@ const FunctionPage = () => {
                     onChange={(e: any) => {
                         setInputName({ name: e.target.value });
                     }}
+                    id={`${id}-inputName`}
                 >
                 </input>
-                Value: {inputName.name}
+                <label htmlFor={'${id}-inputName'}>Name Value: {inputName.name}</label>
+                {/* Value: {inputName.name} */}
                 <br />
                 <textarea
                     placeholder="Feedback..."
                     value={inputFeedback}
+                    ref={inputFeedbackRef}
                     onChange={handleTextAreaChange}
+                    id={'${id}-inputFeedback'}
                 >
                 </textarea>
-                Value: {inputFeedback}
+                <label htmlFor={'${id}-inputFeedback'}>Feedback Value:</label>{" "}{inputFeedback}
+                {/* Value: {inputFeedback} */}
             </div>
             <StudentFunc
                 studentList={state.studentList}

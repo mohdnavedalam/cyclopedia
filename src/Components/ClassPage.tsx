@@ -18,12 +18,12 @@ class ClassPage extends React.Component<any, any> {
     }
 
     componentDidMount = async () => {
-        console.log("component did mount");
+        //console.log("component did mount");
         if (JSON.parse(localStorage.getItem("cyclopediaState")!)) {
             this.setState(JSON.parse(localStorage.getItem("cyclopediaState")!));
         } else {
             const response = await getRandomUser();
-            console.log(response);
+            //console.log(response);
             this.setState((prevState: any) => {
                 return {
                     instructor: {
@@ -37,13 +37,13 @@ class ClassPage extends React.Component<any, any> {
     };
 
     componentDidUpdate = async (prevState: any, prevProps: any) => {
-        console.log("component did update");
+        //console.log("component did update");
         if (this.state.hideInstructor == false)
             localStorage.setItem("cyclopediaState", JSON.stringify(this.state));
         else
             localStorage.removeItem("cyclopediaState");
-        console.log(this.state.studentCount);
-        console.log(prevProps.studentCount);
+        //console.log(this.state.studentCount);
+        //console.log(prevProps.studentCount);
         if (prevProps.studentCount < this.state.studentCount) {
             const response = await getRandomUser();
             this.setState((prevState: any) => {
@@ -66,7 +66,7 @@ class ClassPage extends React.Component<any, any> {
     };
 
     componentWillUnmount = () => {
-        console.log("component will unmount");
+        //console.log("component will unmount");
     };
 
     handleTextAreaChange = (e: any) => {
@@ -90,7 +90,7 @@ class ClassPage extends React.Component<any, any> {
     };
 
     render() {
-        console.log("render component");
+        //console.log("render component");
         return (
             <div>
                 <span className="h4 text-success">Instructor &nbsp;</span>
