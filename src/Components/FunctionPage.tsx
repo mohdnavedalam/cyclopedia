@@ -6,6 +6,10 @@ import { get } from "http";
 
 const FunctionPage = () => {
 
+    const [totalRender, setTotalRender] = useState(() => {
+        return 0;
+    });
+
     const [state, setState] = useState(() => {
         return {
             instructor: undefined,
@@ -24,16 +28,21 @@ const FunctionPage = () => {
     });
 
     useEffect(() => {
-        console.log("call on every render");
+        //console.log("call on every render");
     });
 
     useEffect(() => {
-        console.log("call on first/initial render/mount");
+        //console.log("call on first/initial render/mount");
         state.hideInstructor = false;
     }, []);
 
     useEffect(() => {
-        console.log("call on hideInstructor value changes");
+        setTotalRender((prevState: any) => prevState + 1);
+        console.log("render" + " " + totalRender);
+    }, [state.hideInstructor]);
+
+    useEffect(() => {
+        //console.log("call on hideInstructor value changes");
         const getUser = async () => {
             const response = await getRandomUser();
             setState((prevState: any) => {
@@ -47,7 +56,7 @@ const FunctionPage = () => {
                 };
             });
         };
-        if (state.hideInstructor) {
+        if (!state.hideInstructor) {
             getUser();
         }
     }, [state.hideInstructor]);
@@ -80,13 +89,13 @@ const FunctionPage = () => {
     }, [state.studentCount]);
 
     useEffect(() => {
-        console.log("call only on value changes");
+        //console.log("call only on value changes");
     }, [state.hideInstructor, inputFeedback]);
 
     useEffect(() => {
-        console.log("call on first render");
+        //console.log("call on first render");
         return () => {
-            console.log("call on unmount");
+            //console.log("call on unmount");
         }
     }, [inputName]);
 
@@ -131,6 +140,7 @@ const FunctionPage = () => {
                     <InstructorFunc instructor={state.instructor} />
                 ) : null
             }
+            <div className="p-3">Render Count: {totalRender}</div>
             <div className="p-3">
                 <span className="h4 text-success">Feedback</span>
                 <br />
